@@ -1,0 +1,207 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+	<Script file="WhoHas.lua" />
+  <Script file="Localization-enUS.lua" />
+
+  <Frame name="WhoHas" parent="GameTooltip" hidden="false">
+    <Scripts>
+      <OnLoad>
+        WhoHas.OnLoad();
+      </OnLoad>
+      <OnEvent>
+        WhoHas.OnEvent();
+      </OnEvent>
+      <OnShow>
+        WhoHas.OnShow();
+      </OnShow>
+      <OnHide>
+      </OnHide>
+    </Scripts>
+  </Frame>
+
+  <CheckButton name="WhoHasCheckButtonTemplate" inherits="UICheckButtonTemplate" virtual="true">
+    <Scripts>
+      <OnLoad>
+        getglobal(this:GetName().."Text"):SetText(WhoHas.text[this:GetName()]);
+        --this.var = WhoHas.fields[this.GetName()];
+      </OnLoad>
+      <OnShow>
+        this:SetChecked(WhoHasConfig[this.var]);
+      </OnShow>
+      <OnClick>
+        WhoHasConfig[this.var] = this:GetChecked();
+        if (this:GetChecked()) then
+          PlaySound("igMainMenuOptionCheckBoxOff");
+        else
+          PlaySound("igMainMenuOptionCheckBoxOn");
+        end
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+
+  <Frame name="WhoHasConfigFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent">
+    <Size>
+      <AbsDimension x="220" y="290" />
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER">
+        <Offset>
+          <AbsDimension x="0" y="40"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      <BackgroundInsets>
+        <AbsInset left="11" right="12" top="12" bottom="11" />  
+        <Size>
+          <AbsDimension x="128" y="17" />
+        </Size>
+      </BackgroundInsets>
+      <TileSize>
+        <AbsValue val="32" />
+      </TileSize>
+      <EdgeSize>
+        <AbsValue val="32" />
+      </EdgeSize>
+    </Backdrop>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture file="Interface\DialogFrame\UI-DialogBox-Header">
+          <Size>
+            <AbsDimension x="260" y="64" />
+          </Size>
+          <Anchors>
+            <Anchor point="TOP">
+              <Offset>
+                <AbsDimension x="0" y="12" />
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+        <FontString name="$parentTitle" inherits="GameFontNormal" text="WHOHAS CONFIG">
+          <Anchors>
+            <Anchor point="TOP" relativeTo="$parent">
+              <Offset>
+                <AbsDimension x="0" y="-2" />
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+		<Frames>
+			<Button name="WhoHasCloseButton" inherits="UIPanelButtonTemplate" text="CLOSE">
+				<Size>
+					<AbsDimension x="80" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOM" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="20"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText(WhoHas.text[this:GetName()]);
+          </OnLoad>
+					<OnClick>
+						HideUIPanel(this:GetParent());
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="WhoHasEnableButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="TOPLEFT">
+						<Offset>
+              <AbsDimension x="30" y="-35"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasTotalsButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasEnableButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasStackSizeButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasTotalsButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasInboxButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasStackSizeButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasKeyringButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasInboxButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasEquipmentButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasKeyringButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="WhoHasBagsButton" inherits="WhoHasCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" RelativePoint="BOTTOMLEFT" relativeTo="WhoHasEquipmentButton">
+						<Offset>
+              <AbsDimension x="0" y="4"/>
+            </Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+        getglobal(this:GetName().."Title"):SetText(WhoHas.text[this:GetName()]);
+        WhoHasEnableButton.var     = "enabled"
+        WhoHasTotalsButton.var     = "totals"
+        WhoHasStackSizeButton.var  = "stacks"
+        WhoHasInboxButton.var      = "inbox"
+        WhoHasKeyringButton.var    = "keyring"
+        WhoHasEquipmentButton.var  = "equipment"
+        WhoHasBagsButton.var       = "bags"
+			</OnLoad>
+      <OnShow>
+        PlaySound("igMainMenuOption");
+      </OnShow>
+      <OnHide>
+        PlaySound("gsTitleOptionOK");
+      </OnHide>
+			<OnMouseDown>
+				if (arg1 == "LeftButton") then
+					this:StartMoving();
+				end
+			</OnMouseDown>
+			<OnMouseUp>
+				if (arg1 == "LeftButton") then
+					this:StopMovingOrSizing();
+				end
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+</Ui>

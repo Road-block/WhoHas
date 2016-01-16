@@ -1,0 +1,14 @@
+## Interface: 11200
+## Title: WhoHas
+## Version: 2.3.2
+## Author: Gruma
+## Notes: Modifies the tooltip to show who has item in it.
+## SavedVariables: WhoHasConfig
+## OptionalDeps: CharacterProfiler Possessions Baggins myAddons SellValue
+## RequiredDeps:
+## X-Date: November 23, 2007
+## X-Email: gruma@pobox.com
+## X-Website:
+## X-Category: MYADDONS_CATEGORY_INVENTORY
+## X-OptionsFrame: WhoHasConfigFrame
+WhoHas.xml
