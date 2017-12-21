@@ -34,6 +34,16 @@ WhoHas.categories = {
 }
 
 -------------------------------------------------------------------------------
+-- Utility
+-------------------------------------------------------------------------------
+
+function WhoHas.camelCase(word)
+  return string.gsub(word,"(%a)([%w_']*)",function(head,tail) 
+    return string.format("%s%s",string.upper(head),string.lower(tail)) 
+    end)
+end
+
+-------------------------------------------------------------------------------
 -- OnLoad
 -------------------------------------------------------------------------------
 
@@ -112,7 +122,7 @@ function WhoHas.DelayInit(elapsed)
    if WhoHas.timeSinceLast > 5 then
       WhoHas.timeSinceLast = 0
       WhoHas.timerFrame:SetScript("OnUpdate",nil)
-      pcall(WhoHas.ScanAlts); -- fuck you C-side pairs error
+      WhoHas.ScanAlts();
    end
 end
 
@@ -151,13 +161,14 @@ function WhoHas.SendMail(target, subject, body)
    WhoHas.Orig_SendMail(target, subject, body);
    
    -- proper-case the name
-   target = string.upper(string.sub(target, 1, 1)) .. string.lower(string.sub(target, 2));
-   if (WhoHas.state.altCache[target]) then
+   local properName
+   properName = WhoHas.camelCase(target);
+   if (WhoHas.state.altCache[properName]) then
       for i = 1, 12 do
          local item, _, qty, _ = GetSendMailItem(i);
          if (item) then
-            WhoHas.state.altCache[target][item] = WhoHas.state.altCache[target][item] or {};
-            WhoHas.state.altCache[target][item].Inbox = (WhoHas.state.altCache[target][item].Inbox or 0) + qty;
+            WhoHas.state.altCache[properName][item] = WhoHas.state.altCache[properName][item] or {};
+            WhoHas.state.altCache[properName][item].Inbox = (WhoHas.state.altCache[properName][item].Inbox or 0) + qty;
          end
       end
    end
@@ -375,16 +386,16 @@ function WhoHas.ScanAltsPoss()
    else
       slots = WhoHas.Poss.Siz;
    end
-
-   if (PossessionsData and PossessionsData[WhoHas.state.realm]) then
-      local realm = tostring(WhoHas.state.realm)
+   local properName
+   local realm = tostring(WhoHas.state.realm)
+   if (PossessionsData and PossessionsData[realm] and next(PossessionsData[realm])) then
       for charName, charData in pairs(PossessionsData[realm]) do
          if (charName and charData and (WhoHasConfig.allfactions or charData.faction == WhoHas.state.faction)) then
             -- Possessions lower-cases character names, annoyingly
-            charName = string.upper(string.sub(charName, 1, 1)) .. string.sub(charName, 2);
-            if (charName ~= WhoHas.state.player) then
-               WhoHas.state.altCache[charName] = {};
-               WhoHas.ScanCharPoss(charName, charData, slots, WhoHas.state.altCache[charName]);
+            properName = WhoHas.camelCase(charName);
+            if (properName ~= WhoHas.state.player) then
+               WhoHas.state.altCache[properName] = {};
+               WhoHas.ScanCharPoss(properName, charData, slots, WhoHas.state.altCache[properName]);
             end
          end
       end
